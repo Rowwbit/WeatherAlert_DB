@@ -18,7 +18,7 @@ namespace WeatherAlert_DB
             // If so prevent API Calls here.
             if (!SQLite_Data_Access.IsUsingDummyDB)
             {
-                while (SyncInfoToDB())
+                while (SyncingInfoToDB())
                 {
                     ApiTimeSpan = new TimeSpan(0,0,0,0,-1);
                 }
@@ -54,15 +54,15 @@ namespace WeatherAlert_DB
             ApiTimer.Interval = 30000;
             ApiTimeSpan = new TimeSpan(0, 0, 0, 0, (int)ApiTimer.Interval);
         }
-        private static bool SyncInfoToDB()
+        private static bool SyncingInfoToDB()
         {
+            // Call log to write to later.
+            LogHandler AlertLog = new LogHandler("Succesfully synced records.\nDuplicates skipped:");
+
             // Declare bool to check if the data is still being entered or it is done
             bool IsSyncing = true;
 
-            // Call log to write to later.
-            LogHandler AlertLog = new LogHandler("Succesfully synced records.\nDuplicates skipped:");
-            
-            // Call and Read from GET request.
+            // Call and Read from HTTP/GET request.
             var AlertInfoList = NWS_ApiController.ReturnApiCall();
 
             while (AlertInfoList.Count > 0 && AlertInfoList != null)
@@ -79,7 +79,7 @@ namespace WeatherAlert_DB
                 bool HasIdAlreadyBeenFound = false;
 
                 // Have to check line by line incase some parameters wasn't sent
-                for (int CurrentIndex = 0; CurrentIndex < 8; ++CurrentIndex)
+                for (int CurrentIndex = 0; CurrentIndex < 8 && CurrentIndex < AlertInfoList.Count; ++CurrentIndex)
                 {
 
                     // Iterate through all entries and scan for certain keywords
@@ -124,6 +124,7 @@ namespace WeatherAlert_DB
                     }
                     else if (AlertInfoList[CurrentIndex].StartsWith("description:"))
                     {
+                        // Grab Decription & Decription Keywords
                         ValuesForObjectInstantiation[8] = Alert.ParseDescription(AlertInfoList[6]);
                         ValuesForObjectInstantiation[9] += Alert.ParseForDescriptiveKeywords(AlertInfoList[6]);
                         LinesTriggered++;
@@ -157,7 +158,7 @@ namespace WeatherAlert_DB
                     AlertInfoList.RemoveRange(0, LinesTriggered);
                 }
 
-                // Check for certain properties that may not have been sent
+                // Check if NWS Headline was sent, if so contruct the Alert with it set to NOT SPECIFIED
                 else if (WasThereA_NwsHeadline == false && LinesTriggered == 7)
                 {
                     // Prevent NULL DB entry and specifically set the entries to 

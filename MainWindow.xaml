@@ -74,11 +74,34 @@
                     </ListView>
                 </DockPanel>
             </TabItem>
-            <TabItem Header="Graph View" Grid.Row="1" Style="{StaticResource MenuTriggerStyle}">
-            <TextBlock Text="Section Under Development" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="48"/>
+            <TabItem Name="GraphView_TabItem"  Header="Graph View" Style="{StaticResource MenuTriggerStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition MaxHeight="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border BorderBrush="Black" BorderThickness=".5" Grid.Row="0"></Border>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="85"/>
+                            <ColumnDefinition Width="275*"/>
+                            <ColumnDefinition Width="65"/>
+                            <ColumnDefinition Width="170" MaxWidth="170"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <RadioButton x:Name="GV_PieChart_RadioButton" Margin="2,6,0,0" Content="Pie Chart" Grid.Column="0" IsChecked="True" Click="GV_PieChart_RadioButton_Click"/>
+                        <RadioButton x:Name="GV_BarGraph_RadioButton" Margin="2,6,0,0" Content="Bar Graph" Grid.Column="1" Click="GV_BarGraph_RadioButton_Click"/>
+                        <Label Content="Filter By:" Grid.Column="2"></Label>
+                        <ComboBox Name="GV_Filterby_ComboBox" Margin="2,2,2,2" Grid.Column="3" ItemsSource="{Binding Path=GraphFilter}"
+                                  DisplayMemberPath="ComboBoxFilterName" SelectionChanged="GV_Filterby_ComboBox_SelectionChanged">
+                        </ComboBox>
+                    </Grid>
+                    <WpfPlot x:Name="GraphView_Plot" MinHeight="400" Grid.Row="1"/>
+
+                </Grid>
             </TabItem>
         </TabControl>
-        
+
         <Button x:Name="DatabaseOptions_Button" Content="Database Options" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0" Height="20" Width="100" Click="DatabaseOptions_Button_Click" />
         <StatusBar x:Name="Bottom_StatusBar" Grid.Row="1" Background="#FFD8D8D8" BorderThickness="1" BorderBrush="#FF767676">
             <StatusBarItem HorizontalAlignment="Left">
@@ -90,5 +113,5 @@
             </StatusBarItem>
         </StatusBar>
     </Grid>
-    
+
 </Window>

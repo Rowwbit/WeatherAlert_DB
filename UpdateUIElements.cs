@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScottPlot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -278,5 +279,37 @@ namespace WeatherAlert_DB
         // -------------------------------------------
         // - GRAPH VIEW SECTION                      -
         // -------------------------------------------
+        public static void UpdateGraphViewUI(ComboBox filterbyComboBox, RadioButton pieChartRadioButton,
+                                            RadioButton barGraphRadioButton, WpfPlot wpfPlot)
+        {
+            // Populate the FilterBy combobox
+            UpdateUIGraphViewFilterComboBox(filterbyComboBox);
+
+            // Check what type of graph the user wants and then generate it
+            if (pieChartRadioButton.IsChecked == true && filterbyComboBox.SelectedItem != null)
+            {
+                GraphGenerator graphGenerator = new GraphGenerator((GraphFilter)filterbyComboBox.SelectedItem, 
+                                                wpfPlot, GraphGenerator.GraphType.PieChart);
+            }
+            else if (barGraphRadioButton.IsChecked == true && filterbyComboBox.SelectedItem != null)
+            {
+                GraphGenerator graphGenerator = new GraphGenerator((GraphFilter)filterbyComboBox.SelectedItem,
+                                                wpfPlot, GraphGenerator.GraphType.BarGraph);
+            }
+
+            wpfPlot.Render();
+        }
+        private static void UpdateUIGraphViewFilterComboBox(ComboBox graphView_FilterComboBox)
+        {
+            // Add GraphFilter objects to the ComboBox
+            if (graphView_FilterComboBox.Items.Count == 0)
+            {
+                graphView_FilterComboBox.Items.Add(new GraphFilter((GraphFilter.FilterName.DescriptionKeywords)));
+                graphView_FilterComboBox.Items.Add(new GraphFilter((GraphFilter.FilterName.EventType)));
+                graphView_FilterComboBox.Items.Add(new GraphFilter((GraphFilter.FilterName.Severity)));
+                graphView_FilterComboBox.Items.Add(new GraphFilter((GraphFilter.FilterName.State)));
+            }
+            
+        }
     }
 }

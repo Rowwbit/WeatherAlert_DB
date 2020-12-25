@@ -12,9 +12,10 @@ namespace WeatherAlert_DB
         public MainWindow()
         {
             InitializeComponent();
-            //debug
             UpdateEventViewUI();
             AddEventsToKeywordCheckBoxs();
+            //Debug
+            
         }
 
         private void DatabaseOptions_Button_Click(object sender, RoutedEventArgs e)
@@ -33,6 +34,14 @@ namespace WeatherAlert_DB
                 EventView_ListView, EV_EventID_TextBox, EV_DateStart_DatePicker,
                 EV_DateEnd_DatePicker, EV_EventType_ComboBox, EV_State_ComboBox,
                  EV_Severity_ComboBox,EV_Keywords_ListBox, Bottom_StatusBar);
+        }
+        /// <summary>
+        /// Refresh and Display control data to the user for the entire GraphView section.
+        /// </summary>
+        public void UpdateGraphViewUI()
+        {
+            GraphView_Plot.plt.Clear();  
+            UpdateUIElements.UpdateGraphViewUI(GV_Filterby_ComboBox, GV_PieChart_RadioButton, GV_BarGraph_RadioButton, GraphView_Plot);
         }
         private void AddEventsToKeywordCheckBoxs()
         {
@@ -109,6 +118,18 @@ namespace WeatherAlert_DB
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ShowUserFirstTimeHelpWindow();
+        }
+        private void GV_PieChart_RadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateGraphViewUI();
+        }
+        private void GV_BarGraph_RadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateGraphViewUI();
+        }
+        private void GV_Filterby_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateGraphViewUI();
         }
     } 
 }

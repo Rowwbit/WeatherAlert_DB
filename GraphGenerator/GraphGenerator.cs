@@ -17,6 +17,7 @@ namespace WeatherAlert_DB
         {
             graphDataConstructor = new GraphDataConstructor(_graphFilter); 
             GenerateGraph(wpfPlot, graphType);
+            SetPlotTitle(wpfPlot, _graphFilter);
         }
         /// <summary>
         /// Generates a graph for the user based on what graph they want.
@@ -39,12 +40,15 @@ namespace WeatherAlert_DB
         private void SetAsPieChart(WpfPlot wpfPlot)
         {
             // Make the PieChart
-            wpfPlot.plt.PlotPie(graphDataConstructor.graphData.DataValues, graphDataConstructor.graphData.TextLabels, showLabels: true);
+            wpfPlot.plt.PlotPie(graphDataConstructor.graphData.DataValues, graphDataConstructor.graphData.TextLabels, showLabels: true, explodedChart: false, showValues:true);
 
             // Customize the plot to make it look nicer
             wpfPlot.plt.Grid(false);
             wpfPlot.plt.Frame(false);
             wpfPlot.plt.Ticks(false, false);
+            wpfPlot.plt.XLabel("Filter Breakdown");
+            wpfPlot.plt.YLabel("Number Of Occurrences");
+
         }
         private void SetAsBarGraph(WpfPlot wpfPlot)
         {
@@ -57,12 +61,19 @@ namespace WeatherAlert_DB
             wpfPlot.plt.Grid(true);
             wpfPlot.plt.Frame(true);
             wpfPlot.plt.Ticks(true, true);
+            wpfPlot.plt.XLabel("Filter Breakdown");
+            wpfPlot.plt.YLabel("Number Of Occurrences");
 
             // Apply custom axis tick labels
             wpfPlot.plt.XTicks(graphDataConstructor.graphData.ConsecutiveDataCount, graphDataConstructor.graphData.TextLabels);
 
             // Set graph movement restrictions
             wpfPlot.Configure(enablePanning: true, recalculateLayoutOnMouseUp: false, enableRightClickZoom: true, lockVerticalAxis: false, enableScrollWheelZoom: true);
+        }
+        private void SetPlotTitle(WpfPlot wpfPlot, GraphFilter graphFilter)
+        {
+            string Title = "Graph: " + graphFilter.ComboBoxFilterName.ToString();
+            wpfPlot.plt.Title(bold:true, title: Title);
         }
     }
 }

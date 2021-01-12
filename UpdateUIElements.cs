@@ -16,6 +16,7 @@ namespace WeatherAlert_DB
     public class UpdateUIElements
     {
         private static bool IsDispatcherTimerActive = false;
+
         // -------------------------------------------
         // - EVENT VIEWER SECTION                    -
         // -------------------------------------------
@@ -44,13 +45,19 @@ namespace WeatherAlert_DB
                 ApiLoopHandler.StartApiTimerLoop();
             }
         }
+
+        private static void RefreshUIDelayTimer_Tick(object sender, EventArgs e)
+        {
+            
+        }
+
         /// <summary>
         /// Tell the Main Window to refresh the event viewer.
         /// </summary>
         public static void ForceEventViewerRefresh()
         {
             var window = (MainWindow)Application.Current.MainWindow;
-            window.UpdateEventViewUI();
+            window.RefreshUIDelayTimer.Start();
         }
 
         // -------------------------------------------
@@ -113,14 +120,7 @@ namespace WeatherAlert_DB
             {
                 if (!ValidChars.Contains(c))
                 {
-                    eventIDTextBox.Text = eventIDTextBox.Text.Remove(eventIDTextBox.Text.Length - 1);
-
-                    InformUserDialog informUserDialog =
-                        new InformUserDialog("Please enter the correct characters.",
-                                             "OK", "Valid characters: (0,1,2,3,4,5,6,7,8,9,-)");
-                    informUserDialog.Owner = Window.GetWindow(eventIDTextBox);
-                    informUserDialog.ShowDialog();
-                    ContainsValidChars = false;
+                    eventIDTextBox.Text = "";
                 }
             }
             // Put the caret back at the end of the textbox for the user

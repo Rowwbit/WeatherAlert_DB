@@ -75,7 +75,6 @@ namespace WeatherAlert_DB
 
                 // Check if a Headline was found since it may not always be sent
                 // These are used to make sure the index gets calculated correctly
-                bool WasThereA_NwsHeadline = false;
                 bool HasIdAlreadyBeenFound = false;
 
                 // Have to check line by line incase some parameters wasn't sent
@@ -131,7 +130,6 @@ namespace WeatherAlert_DB
                     }
                     else if (AlertInfoList[CurrentIndex].StartsWith("NWSheadline:"))
                     {
-                        WasThereA_NwsHeadline = true;
                         // Grab NwsHeadline & DescriptionKeywords
                         ValuesForObjectInstantiation[7] = Alert.ParseNWSHeadline(AlertInfoList[7]);
                         ValuesForObjectInstantiation[9] += Alert.ParseForDescriptiveKeywords(AlertInfoList[7]);                           
@@ -139,7 +137,7 @@ namespace WeatherAlert_DB
                     }
                 }
 
-                if (WasThereA_NwsHeadline && LinesTriggered == 8)
+                if (LinesTriggered == 8)
                 {
                     // Create a new Alert Object and store it in the DB. Insert all the info from the temp array into the object. 
                     Alert alert = new Alert(ValuesForObjectInstantiation[0], ValuesForObjectInstantiation[1],
@@ -159,7 +157,7 @@ namespace WeatherAlert_DB
                 }
 
                 // Check if NWS Headline was sent, if so contruct the Alert with it set to NOT SPECIFIED
-                else if (WasThereA_NwsHeadline == false && LinesTriggered == 7)
+                else if (LinesTriggered == 7)
                 {
                     // Prevent NULL DB entry and specifically set the entries to 
                     if (ValuesForObjectInstantiation[7] == null)

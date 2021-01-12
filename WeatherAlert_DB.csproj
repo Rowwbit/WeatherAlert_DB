@@ -135,15 +135,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ExpandedAlertViewer_Window.xaml.cs">
+    <Compile Include="Dialogs_and_Windows\ExpandedAlertViewer_Window.xaml.cs">
       <DependentUpon>ExpandedAlertViewer_Window.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GraphGenerator\GraphDataValidator.cs" />
     <Compile Include="GraphGenerator\GraphExpressionBuilder.cs" />
     <Compile Include="GraphGenerator\GraphDataConstructor.cs" />
     <Compile Include="GraphGenerator\GraphData.cs" />
     <Compile Include="GraphGenerator\GraphFilter.cs" />
     <Compile Include="GraphGenerator\GraphGenerator.cs" />
-    <Compile Include="InitialHelp_Window.xaml.cs">
+    <Compile Include="Dialogs_and_Windows\InitialHelp_Window.xaml.cs">
       <DependentUpon>InitialHelp_Window.xaml</DependentUpon>
     </Compile>
     <Compile Include="LogHandler.cs" />
@@ -151,19 +152,19 @@
     <Compile Include="NWS_ApiController.cs" />
     <Compile Include="UpdateUIElements.cs" />
     <Compile Include="SQLite_Data_Access.cs" />
-    <Page Include="ExpandedAlertViewer_Window.xaml">
+    <Page Include="Dialogs_and_Windows\ExpandedAlertViewer_Window.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InitialHelp_Window.xaml">
+    <Page Include="Dialogs_and_Windows\InitialHelp_Window.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InformUserDialog.xaml">
+    <Page Include="Dialogs_and_Windows\InformUserDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DatabaseOptions.xaml">
+    <Page Include="Dialogs_and_Windows\DatabaseOptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -176,10 +177,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="InformUserDialog.cs">
+    <Compile Include="Dialogs_and_Windows\InformUserDialog.cs">
       <DependentUpon>InformUserDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseOptions.xaml.cs">
+    <Compile Include="Dialogs_and_Windows\DatabaseOptions.xaml.cs">
       <DependentUpon>DatabaseOptions.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">

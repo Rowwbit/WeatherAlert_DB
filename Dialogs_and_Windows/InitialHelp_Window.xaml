@@ -20,7 +20,6 @@
                     <Run FontWeight="Bold" FontSize="18" Text="What does this application do?"/>
                     <LineBreak/>
                     <Run FontSize="14" Text="This application stores current active weather alerts from the National Weather Service API into a SQLite database."/>
-                    <Run Text=" "/>
                     <Run FontSize="14" Text="The API is called every 15 minutes to check for updates. It only stores alerts that are 100% known or going to occur."/>
                 </Paragraph>
                 <Paragraph>

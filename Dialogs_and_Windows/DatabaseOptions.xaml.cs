@@ -3,7 +3,6 @@ using System.Media;
 using System.Windows;
 using System.IO;
 
-
 namespace WeatherAlert_DB
 {
     /// <summary>
@@ -25,13 +24,12 @@ namespace WeatherAlert_DB
             openFileDialog.Filter = "Database Files (*.db)|*.db";
             if (openFileDialog.ShowDialog() == true)
             {
-                throw new System.NotImplementedException("DB Import functionality not implemented yet.");
+                SQLite_Data_Access.ImportDBFile(openFileDialog.FileName);
 
                 // Log info
                 var Log = new LogHandler("DB Import requested.");
                 Log.WriteLogFile();
             }
-
         }
         private void ExportDB_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -63,26 +61,7 @@ namespace WeatherAlert_DB
                     Log.WriteLogFile();
                 } 
             }
-        }
-        private void EditDB_Button_Click(object sender, RoutedEventArgs e)
-        {
-            // Allow user to edit the DB after confirming prompt.
-            InformUserDialog areYouSureDialog =
-               new InformUserDialog("Are you sure you wish to edit the DB?", "Continue",
-                                         "WARNING: Improper modifications to this database can cause " +
-                                         "corrupted data or put the database in a nonrecoverable state. " +
-                                         "Continue with caution.");
-            areYouSureDialog.Owner = this;
-            if ((bool)areYouSureDialog.ShowDialog())
-            {
-                // Log info
-                var Log = new LogHandler("Edit DB called.");
-                Log.WriteLogFile();
-
-                SQLite_Data_Access.UpdateIn_DB("");
-                this.Close();
-            }
-        }
+        } 
         private void DeleteDB_Button_Click(object sender, RoutedEventArgs e)
         {
             // Give the user one last chance to change their mind before they reset the DB.

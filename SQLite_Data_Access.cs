@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Configuration;
 using System.Data.SQLite;
@@ -27,10 +26,23 @@ namespace WeatherAlert_DB
         /// <summary>
         /// Queries ALL Alerts from a DB.
         /// </summary>
-        /// <returns>List of Alerts</returns>
-        public static List<Alert> SelectAll_DB()
+        /// <param name="conString">Allows a manual Connection String</param>
+        /// <returns>List of Alerts</returns>\
+        public static List<Alert> SelectAll_DB(string conString = null)
         {
-            using (IDbConnection connection = new  SQLiteConnection(CheckWhichDBIsUsed()))
+            // Check if user is wanting to import DB or not.
+            IDbConnection connection;
+            if (conString == null)
+            {
+                connection = new SQLiteConnection(CheckWhichDBIsUsed());
+            }
+            else
+            {
+                connection = new SQLiteConnection("Data Source=" + conString);
+            }
+
+            // Start connection and return alerts from whichever DB is used.
+            using (connection)
             {
                 List<Alert> alerts = new List<Alert>();
 
@@ -132,24 +144,6 @@ namespace WeatherAlert_DB
                 return false;
             }
         }
-
-        /// <summary>
-        /// UPDATE an Alert object in DB.
-        /// </summary>
-        public static void UpdateIn_DB(string id)
-        {
-            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString(ConnectionString.MainDB)))
-            {
-                throw new NotImplementedException("To be completed later");
-                SQLiteCommand CMD = new SQLiteCommand();
-                CMD.Connection = (SQLiteConnection)connection;
-                CMD.CommandType = CommandType.Text;
-                CMD.CommandText = "UPDATE WHERE";
-                CMD.Connection.Open();
-                CMD.ExecuteNonQuery();
-                CMD.Connection.Close();
-            }
-        }
         /// <summary>
         /// Deletes ALL Alerts from the DB.
         /// </summary>
@@ -167,32 +161,28 @@ namespace WeatherAlert_DB
             }
         }
         /// <summary>
-        /// Delete an Alert from the DB.
+        /// Import another Alert DB to the existing one.
         /// </summary>
-        public static void DeleteIn_DB(string alertId)
+        /// <param name="FilePath"></param>
+        public static void ImportDBFile(string filePath)
         {
-            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString(ConnectionString.MainDB)))
+            List<Alert> alerts = SelectAll_DB(filePath);
+
+            foreach (var alert in alerts)
             {
-                SQLiteCommand CMD = new SQLiteCommand();
-                CMD.Connection = (SQLiteConnection)connection;
-                CMD.CommandType = CommandType.Text;
-                CMD.CommandText = string.Format("DELETE FROM Alerts WHERE Id='{0}'", alertId);
-                CMD.Connection.Open();
-                CMD.ExecuteNonQuery();
-                CMD.Connection.Close();
+                InsertIn_DB(alert);
             }
         }
-        private static string CheckWhichDBIsUsed()
+        private static string CheckWhichDBIsUsed(string _connectionstring = null)
         {
             // Checks if the user wants to use the DummyDB or not
-            // This is ONLY used on the Select All query to prevent invalid edits to the DummyDB
-            if (IsUsingDummyDB)
+            if (IsUsingDummyDB == false)
             {
-                return LoadConnectionString(ConnectionString.DummyDB);
+                return LoadConnectionString(ConnectionString.MainDB);
             }
             else
             {
-                return LoadConnectionString(ConnectionString.MainDB);
+                return LoadConnectionString(ConnectionString.DummyDB);
             }
         }
     }

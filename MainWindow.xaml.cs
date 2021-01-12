@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace WeatherAlert_DB
 {
@@ -9,15 +10,30 @@ namespace WeatherAlert_DB
     /// </summary>
     public partial class MainWindow : Window
     {
+        public DispatcherTimer RefreshUIDelayTimer;
         public MainWindow()
         {
             InitializeComponent();
+            InitializeWindowLogic();
+        }
+        private void InitializeWindowLogic()
+        {
+            // Perform necessary population of controls and events on launch
             UpdateEventViewUI();
             AddEventsToKeywordCheckBoxs();
-            //Debug
-            
-        }
 
+            // Handle the Dispatcher Timer
+            RefreshUIDelayTimer = new DispatcherTimer();
+            RefreshUIDelayTimer.Tick += RefreshUIDelayTimer_Tick;
+            RefreshUIDelayTimer.Interval = new TimeSpan(0, 0, 0, 0, 450);
+            RefreshUIDelayTimer.Start();
+        }
+        private void StartRefreshUIDelayTimer()
+        {
+            // Stop the timer if its already going and then start it
+            RefreshUIDelayTimer.Stop();
+            RefreshUIDelayTimer.Start();
+        }
         private void DatabaseOptions_Button_Click(object sender, RoutedEventArgs e)
         {
             //Show user the DB Options Window
@@ -28,7 +44,7 @@ namespace WeatherAlert_DB
         /// <summary>
         /// Refresh and Display control data to the user for the entire EventViewer section.
         /// </summary>
-        public void UpdateEventViewUI()
+        private void UpdateEventViewUI()
         {
             UpdateUIElements.PopulateAllEventViewControls(
                 EventView_ListView, EV_EventID_TextBox, EV_DateStart_DatePicker,
@@ -38,7 +54,7 @@ namespace WeatherAlert_DB
         /// <summary>
         /// Refresh and Display control data to the user for the entire GraphView section.
         /// </summary>
-        public void UpdateGraphViewUI()
+        private void UpdateGraphViewUI()
         {
             GraphView_Plot.plt.Clear();  
             UpdateUIElements.UpdateGraphViewUI(GV_Filterby_ComboBox, GV_PieChart_RadioButton, GV_BarGraph_RadioButton, GraphView_Plot);
@@ -82,31 +98,31 @@ namespace WeatherAlert_DB
 
         private void KeyWordCheckBox_Changed(object sender, RoutedEventArgs e)
         {
-            UpdateEventViewUI();
+            StartRefreshUIDelayTimer();
         }
         private void EV_EventID_TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateEventViewUI();
+            StartRefreshUIDelayTimer();
         }
         private void EV_DateStart_DatePicker_CalendarClosed(object sender, RoutedEventArgs e)
         {
-            UpdateEventViewUI();
+            StartRefreshUIDelayTimer();
         }
         private void EV_DateEnd_DatePicker_CalendarClosed(object sender, RoutedEventArgs e)
         {
-            UpdateEventViewUI();
+            StartRefreshUIDelayTimer();
         }
         private void EV_EventType_ComboBox_DropDownClosed(object sender, EventArgs e)
         {
-            UpdateEventViewUI();
+            StartRefreshUIDelayTimer();
         }
         private void EV_State_ComboBox_DropDownClosed(object sender, EventArgs e)
         {
-            UpdateEventViewUI();
+            StartRefreshUIDelayTimer();
         }
         private void EV_Severity_ComboBox_DropDownClosed(object sender, EventArgs e)
         {
-            UpdateEventViewUI();
+            StartRefreshUIDelayTimer();
         }
         private void EventView_ListView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -121,14 +137,20 @@ namespace WeatherAlert_DB
         }
         private void GV_PieChart_RadioButton_Click(object sender, RoutedEventArgs e)
         {
-            UpdateGraphViewUI();
+            StartRefreshUIDelayTimer();
         }
         private void GV_BarGraph_RadioButton_Click(object sender, RoutedEventArgs e)
         {
-            UpdateGraphViewUI();
+            StartRefreshUIDelayTimer();
         }
         private void GV_Filterby_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            StartRefreshUIDelayTimer();
+        }
+        private void RefreshUIDelayTimer_Tick(object sender, EventArgs e)
+        {
+            RefreshUIDelayTimer.Stop();
+            UpdateEventViewUI();
             UpdateGraphViewUI();
         }
     } 

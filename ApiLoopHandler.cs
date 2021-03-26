@@ -28,7 +28,7 @@ namespace WeatherAlert_DB
             }
             else
             {
-                LogHandler Log = new LogHandler("Skipped API request: User is using DummyDB instead.");
+                LogHandler Log = new LogHandler("Skipped API request: User is using DummyDB.");
                 Log.WriteLogFile();
             }
         }
@@ -57,7 +57,7 @@ namespace WeatherAlert_DB
         private static bool SyncingInfoToDB()
         {
             // Call log to write to later.
-            LogHandler AlertLog = new LogHandler("Succesfully synced records.\nDuplicates skipped:");
+            LogHandler AlertLog = new LogHandler("Successfully synced records.\nDuplicates skipped:");
 
             // Declare bool to check if the data is still being entered or it is done
             bool IsSyncing = true;
@@ -74,7 +74,6 @@ namespace WeatherAlert_DB
                 int LinesTriggered = 0;
 
                 // Check if a Headline was found since it may not always be sent
-                // These are used to make sure the index gets calculated correctly
                 bool HasIdAlreadyBeenFound = false;
 
                 // Have to check line by line incase some parameters wasn't sent
@@ -143,12 +142,13 @@ namespace WeatherAlert_DB
                     Alert alert = new Alert(ValuesForObjectInstantiation[0], ValuesForObjectInstantiation[1],
                         ValuesForObjectInstantiation[2], ValuesForObjectInstantiation[3], ValuesForObjectInstantiation[4],
                         ValuesForObjectInstantiation[5], ValuesForObjectInstantiation[6], ValuesForObjectInstantiation[7],
-                        ValuesForObjectInstantiation[8], Alert.CleanDescriptiveKeywords(ValuesForObjectInstantiation[9]), ValuesForObjectInstantiation[10]);
+                        ValuesForObjectInstantiation[8], Alert.CleanDescriptiveKeywords(ValuesForObjectInstantiation[9]),
+                        ValuesForObjectInstantiation[10]);
 
                     // Construct the objects and for each skipped object out it to log
                     if (!SQLite_Data_Access.InsertIn_DB(alert))
                     {
-                        AlertLog.LogMessage += $" ,{ValuesForObjectInstantiation[0]}";
+                        AlertLog.LogMessage += $" {ValuesForObjectInstantiation[0]},";
                         AlertLog.NumOfObjects++;
                     }
 
@@ -169,7 +169,8 @@ namespace WeatherAlert_DB
                     Alert alert = new Alert(ValuesForObjectInstantiation[0], ValuesForObjectInstantiation[1],
                         ValuesForObjectInstantiation[2], ValuesForObjectInstantiation[3], ValuesForObjectInstantiation[4],
                         ValuesForObjectInstantiation[5], ValuesForObjectInstantiation[6], ValuesForObjectInstantiation[7],
-                        ValuesForObjectInstantiation[8], Alert.CleanDescriptiveKeywords(ValuesForObjectInstantiation[9]), ValuesForObjectInstantiation[10]);
+                        ValuesForObjectInstantiation[8], Alert.CleanDescriptiveKeywords(ValuesForObjectInstantiation[9]),
+                        ValuesForObjectInstantiation[10]);
 
                     // Construct the objects and for each skipped object out it to log
                     if (!SQLite_Data_Access.InsertIn_DB(alert))

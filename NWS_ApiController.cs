@@ -11,7 +11,7 @@ namespace WeatherAlert_DB
     /// </summary>
     class NWS_ApiController
     {
-        public static HttpClient client = new HttpClient();
+        private static HttpClient client = new HttpClient();
         /// <summary>
         /// Calls a request to the NWS API.
         /// </summary>

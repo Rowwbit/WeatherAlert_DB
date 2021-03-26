@@ -63,8 +63,7 @@ namespace WeatherAlert_DB
         /// <returns>Truncated ID as a string.</returns>
         public static string ParseID(string id)
         {
-            int numOfCharsToRemove = id.LastIndexOf("PROD-");
-            return id.Remove(0, numOfCharsToRemove + 5).Trim(',');
+            return id.Replace("@id: https://api.weather.gov/alerts/", "");
         }
         /// <summary>
         /// Converts the raw Date from the API into the correct format for the DB. Json tag: "sent"

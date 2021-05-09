@@ -31,25 +31,21 @@ namespace WeatherAlert_DB
             catch (HttpRequestException e)
             {
                 // Catch the exception and generate a Log entry with the exception 
-                MessageBox.Show("NWS Services currently unavailable." +
-                                 "\nException has been logged." +
-                                 "\nPlease try again later.");
+                MessageBox.Show("NWS Services currently unavailable.\nPlease try again later.");
 
                 // Log info
-                var Log = new LogHandler("ERROR: NWS Services could not be requested.", e);
-                Log.WriteLogFile();
+                var Log = new LogHandler(LogType.WARNING, e);
+                Log.WriteLogFile("ERROR: NWS Services could not be requested.");
                 return "";
             }
             catch (AggregateException e)
             {
                 // Catch the exception and generate a Log entry with the exception 
-                MessageBox.Show("NWS Services currently unavailable." +
-                                 "\nException has been logged." +
-                                 "\nPlease try again later.");
+                MessageBox.Show("NWS Services currently unavailable.\nPlease try again later.");
 
                 // Log info
-                var Log = new LogHandler("ERROR: NWS Services could not be requested.", e);
-                Log.WriteLogFile();
+                var Log = new LogHandler(LogType.WARNING, e);
+                Log.WriteLogFile("ERROR: NWS Services could not be requested.");
                 return "";
             }
         }

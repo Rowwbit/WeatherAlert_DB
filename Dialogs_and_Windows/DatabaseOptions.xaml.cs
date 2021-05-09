@@ -27,8 +27,8 @@ namespace WeatherAlert_DB
                 SQLite_Data_Access.ImportDBFile(openFileDialog.FileName);
 
                 // Log info
-                var Log = new LogHandler("DB Import requested.");
-                Log.WriteLogFile();
+                var Log = new LogHandler(LogType.INFO);
+                Log.WriteLogFile("DB Import requested.");
             }
         }
         private void ExportDB_Button_Click(object sender, RoutedEventArgs e)
@@ -44,8 +44,8 @@ namespace WeatherAlert_DB
                     File.Copy("Alert_DB.db", saveFileDialog.FileName, false);
 
                     // Log info
-                    var Log = new LogHandler("Exported DB.");
-                    Log.WriteLogFile();
+                    var Log = new LogHandler(LogType.INFO);
+                    Log.WriteLogFile("Exported DB.");
                 }
                 catch (IOException exception)
                 {
@@ -57,8 +57,8 @@ namespace WeatherAlert_DB
                     areYouSureDialog.ShowDialog();
 
                     // Log info
-                    var Log = new LogHandler("Export DB Denied.", exception);
-                    Log.WriteLogFile();
+                    var Log = new LogHandler(LogType.WARNING ,exception);
+                    Log.WriteLogFile("Export DB Denied.");
                 } 
             }
         } 
@@ -76,8 +76,8 @@ namespace WeatherAlert_DB
                 SQLite_Data_Access.DeleteAllIn_DB();
 
                 // Log info
-                var Log = new LogHandler("WIPED all DB entries.");
-                Log.WriteLogFile();
+                var Log = new LogHandler(LogType.INFO);
+                Log.WriteLogFile("WIPED all DB entries.");
                 this.Close();
             }
         }
@@ -90,8 +90,8 @@ namespace WeatherAlert_DB
             UpdateUIElements.ForceEventViewerRefresh();
 
             // Log info
-            var Log = new LogHandler("Switched to DummyDB.");
-            Log.WriteLogFile();
+            var Log = new LogHandler(LogType.INFO);
+            Log.WriteLogFile("Switched to DummyDB.");
         }
         private void DummyDB_Checkbox_Unchecked(object sender, RoutedEventArgs e)
         {
@@ -104,8 +104,8 @@ namespace WeatherAlert_DB
             ApiLoopHandler.TriggerTimerIn30sec();
 
             // Log info
-            var Log = new LogHandler("Switched to MainDB.");
-            Log.WriteLogFile();
+            var Log = new LogHandler(LogType.INFO);
+            Log.WriteLogFile("Switched to MainDB.");
         }
         private void SyncDB_Button_Click(object sender, RoutedEventArgs e)
         {

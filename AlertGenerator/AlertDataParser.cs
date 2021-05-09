@@ -1,76 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WeatherAlert_DB
+namespace WeatherAlert_DB.AlertGenerator
 {
     /// <summary>
-    /// This class includes methods to convert the raw json info from the API to construct Alert Objects.
+    /// Takes raw data and filters/sanitizes the content.
     /// </summary>
-    public class Alert
+    public class AlertDataParser
     {
-        public string Id { get; }
-        public string Date { get; }
-        public string Time { get; }
-        public string EventType { get; }
-        public string State { get; }
-        public string City { get; }
-        public string Severity { get; }
-        public string NWSHeadline { get; }
-        public string Description { get; }
-        public string DescriptionKeywords { get; }
-        public string AreaDescription { get; }
-        public static Dictionary<string, string> StateDictionary { get; } = new Dictionary<string, string> 
-        { { "AL", "ALABAMA" }, { "AK", "ALASKA" }, { "AZ", "ARIZONA" }, { "AR", "ARKANSAS" },
-          { "CA", "CALIFORNIA" }, { "CO", "COLORADO" }, { "CT", "CONNECTICUT" }, { "DE", "DELAWARE" },
-          { "FL", "FLORIDA" }, { "GA", "GEORGIA" }, { "HI", "HAWAII" }, { "ID", "IDAHO" },
-          { "IL", "ILLINOIS" }, { "IN", "INDIANA" }, { "IA", "IOWA" }, { "KS", "KANSAS" },
-          { "KY", "KENTUCKY" }, { "LA", "LOUISIANA" }, { "ME", "MAINE" }, { "MD", "MARYLAND" },
-          { "MA", "MASSACHUSETTS" }, { "MI", "MICHIGAN" }, { "MN", "MINNESOTA" }, { "MS", "MISSISSIPPI" },
-          { "MO", "MISSOURI" }, { "MT", "MONTANA" }, { "NE", "NEBRASKA" }, { "NV", "NEVADA" },
-          { "NH", "NEW HAMPSHIRE" }, { "NJ", "NEW JERSEY" }, { "NM", "NEW MEXICO" }, { "NY", "NEW YORK" },
-          { "NC", "NORTH CAROLINA" }, { "ND", "NORTH DAKOTA" }, { "OH", "OHIO" }, { "OK", "OKLAHOMA" },
-          { "OR", "OREGON" }, { "PA", "PENNSYLVANIA" }, { "RI", "RHODE ISLAND" }, { "SC", "SOUTH CAROLINA" },
-          { "SD", "SOUTH DAKOTA" }, { "TN", "TENNESSEE" }, { "TX", "TEXAS" }, { "UT", "UTAH" },
-          { "VT", "VERMONT" }, { "VA", "VIRGINIA" }, { "WA", "WASHINGTON" }, { "WV", "WEST VIRGINIA" },
-          { "WI", "WISCONSIN" }, { "WY", "WYOMING" }
-        };
-        public static string[] DescriptorWords { get; } =
-        {     "FOG", "GALE", "SNOW", "RAIN", "ICE", "STORM",
-              "EARTHQUAKE", "TORNADO", "FLOOD", "HURRICANE", "CYCLONE",
-              "BLIZZARD", "HAIL", "WIND", "DUST", "FIRE", "WILDFIRE",
-              "SLUSH", "ADVISORY", "SLEET", "FREEZING", "CLOUDY", 
-              "WATER LEVEL", "WAVE", "SHOWER", "THUNDER", "LIGHTNING",
-              "SURF", "THUNDERSTORM"
-        };
-        public Alert(string id, string date, string time, string eventType, string state, string city, string severity, string nwsHeadline, string description, string descriptionKeywords, string areaDescription)
+        public List<string> parsedData { get; } = new List<string>();
+        AlertProps alertProp;
+        public AlertDataParser(string stringToParse, AlertProps _alertProp)
         {
-            Id = id;
-            Date = date;
-            Time = time;
-            EventType = eventType;
-            State = state;
-            City = city;
-            Severity = severity;
-            NWSHeadline = nwsHeadline;
-            Description = description;
-            DescriptionKeywords = descriptionKeywords;
-            AreaDescription = areaDescription;
+            alertProp = _alertProp;
+            ParseAvailableData(stringToParse);
         }
+
+        public void ParseAvailableData(string stringToParse)
+        {
+            switch (alertProp)
+            {
+                case AlertProps.id:
+                    parsedData.Add(ParseID(stringToParse));
+                    break;
+                case AlertProps.areaDesc:
+                    parsedData.Add(ParseAreaDescription(stringToParse));
+                    break;
+                case AlertProps.sent:
+                    parsedData.Add(ParseDate(stringToParse));
+                    parsedData.Add(ParseTime(stringToParse));
+                    break;
+                case AlertProps.severity:
+                    parsedData.Add(ParseSeverity(stringToParse));
+                    break;
+                case AlertProps.eventType:
+                    parsedData.Add(ParseEvent(stringToParse));
+                    break;
+                case AlertProps.senderName:
+                    parsedData.Add(ParseState(stringToParse));
+                    parsedData.Add(ParseCity(stringToParse));
+                    break;
+                case AlertProps.description:
+                    parsedData.Add(ParseDescription(stringToParse));
+                    parsedData.Add(ParseDescrKeywords(stringToParse));
+                    break;
+                case AlertProps.NWSheadline:
+                    parsedData.Add(ParseNWSHeadline(stringToParse));
+                    parsedData.Add(ParseDescrKeywords(stringToParse));
+                    break;
+            }
+        }
+
         /// <summary>
         /// Converts the raw ID from the API into the correct format for the DB. Json tag: "@id"
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Truncated ID as a string.</returns>
-        public static string ParseID(string id)
+        private string ParseID(string id)
         {
-            return id.Replace("@id: https://api.weather.gov/alerts/", "");
+            return id.Replace("@id: https://api.weather.gov/alerts/", "").Replace(",","");
         }
         /// <summary>
         /// Converts the raw Date from the API into the correct format for the DB. Json tag: "sent"
         /// </summary>
         /// <param name="sent"></param>
         /// <returns>Truncated Date as a string.</returns>
-        public static string ParseDate(string sent)
+        private string ParseDate(string sent)
         {
             sent = sent.Remove(0, 6);
             int numOfCharsToRemove = sent.LastIndexOf('T');
@@ -81,17 +76,17 @@ namespace WeatherAlert_DB
         /// </summary>
         /// <param name="sent"></param>
         /// <returns>Truncated Time as a string.</returns>
-        public static string ParseTime(string sent)
+        private string ParseTime(string sent)
         {
             int numOfCharsToRemove = sent.LastIndexOf('T');
-            return sent.Remove(0,numOfCharsToRemove + 1).Trim(',');
+            return sent.Remove(0, numOfCharsToRemove + 1).Trim(',');
         }
         /// <summary>
         /// Converts the raw State from the API into the correct format for the DB. Json tag: "senderName"
         /// </summary>
         /// <param name="senderName"></param>
         /// <returns>State abbreviation as a string.</returns>
-        public static string ParseState(string senderName)
+        private string ParseState(string senderName)
         {
             string ParsedString = senderName.Remove(0, 17);
             int NumOfCharsToDelete = ParsedString.LastIndexOf(' ');
@@ -100,7 +95,7 @@ namespace WeatherAlert_DB
             // ParsedString now contains either the full states name OR the states abbreviation. 
             // Now iterate through the Dictionary to match values and make sure to output the states abbreviation.
             ParsedString = ParsedString.ToUpper();
-            foreach (var keyValuePair in StateDictionary)
+            foreach (var keyValuePair in Alert.StateDictionary)
             {
                 // Check if State is an abreviation 
                 if (ParsedString == keyValuePair.Key.ToUpper())
@@ -120,9 +115,9 @@ namespace WeatherAlert_DB
         /// </summary>
         /// <param name="senderName"></param>
         /// <returns>Truncated City as a string.</returns>
-        public static string ParseCity(string senderName)
+        private string ParseCity(string senderName)
         {
-            senderName = senderName.Remove(0,16).Trim(',');
+            senderName = senderName.Remove(0, 16).Trim(',');
             int NumOfCharsUntilState = senderName.LastIndexOf(' ');
             senderName = senderName.Substring(0, NumOfCharsUntilState);
             return senderName.ToUpper();
@@ -132,9 +127,9 @@ namespace WeatherAlert_DB
         /// </summary>
         /// <param name="description"></param>
         /// <returns>Truncated Description as a string.</returns>
-        public static string ParseDescription(string description)
+        private string ParseDescription(string description)
         {
-            return description.Remove(0,13).Trim(',');
+            return description.Remove(0, 13).Trim(',');
         }
 
         /// <summary>
@@ -142,14 +137,14 @@ namespace WeatherAlert_DB
         /// </summary>
         /// <param name="description"></param>
         /// <returns>A string with descriptor words.</returns>
-        public static string ParseForDescriptiveKeywords(string description)
+        private string ParseDescrKeywords(string description)
         {
 
             string[] SeperatedWords = description.ToString().ToUpper().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             string CombinedDescriptorWords = "";
             foreach (var word in SeperatedWords)
             {
-                foreach (var descriptorWord in DescriptorWords)
+                foreach (var descriptorWord in Alert.DescriptorWords)
                 {
                     if (word.Contains(descriptorWord) && !CombinedDescriptorWords.Contains(descriptorWord))
                     {
@@ -170,34 +165,38 @@ namespace WeatherAlert_DB
         /// </summary>
         /// <param name="NWSheadline"></param>
         /// <returns>Truncated NWSHeadline as a string.</returns>
-        public static string ParseNWSHeadline(string NWSheadline)
+        private string ParseNWSHeadline(string NWSheadline)
         {
-            return NWSheadline.Remove(0,13).Trim(',');
+            if (NWSheadline != "NOT SPECIFIED")
+            {
+                return NWSheadline.Remove(0, 13).Trim(',');
+            }
+            else return "NOT SPECIFIED";
         }
         /// <summary>
         /// Converts the raw Severity into the correct format for the DB. Json tag: "severity"
         /// </summary>
         /// <param name="severity"></param>
         /// <returns>Truncated Severity as a string.</returns>
-        public static string ParseSeverity(string severity)
+        private string ParseSeverity(string severity)
         {
-            return severity.Remove(0,10).Trim(',');
+            return severity.Remove(0, 10).Trim(',');
         }
         /// <summary>
         /// Converts the raw EventType into the correct format for the DB. Json tag: "event"
         /// </summary>
         /// <param name="eventType"></param>
         /// <returns></returns>
-        public static string ParseEvent(string eventType)
+        private string ParseEvent(string eventType)
         {
             return eventType.Remove(0, 7).Trim(',');
         }
-        public static string ParseAreaDescription(string areaDesc)
+        private string ParseAreaDescription(string areaDesc)
         {
             return areaDesc.Remove(0, 10).Trim(',');
         }
         /// <summary>
-        /// Takes a string and ensures no duplicate entries were found. Also removes UNKNOWN if entries are found.
+        /// Takes a combined string for the headline and descriptive keywords then cleans them.
         /// </summary>
         /// <param name="keywords"></param>
         /// <returns>Filtered string of Keywords</returns>

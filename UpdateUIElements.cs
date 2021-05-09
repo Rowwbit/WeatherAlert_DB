@@ -46,11 +46,6 @@ namespace WeatherAlert_DB
             }
         }
 
-        private static void RefreshUIDelayTimer_Tick(object sender, EventArgs e)
-        {
-            
-        }
-
         /// <summary>
         /// Tell the Main Window to refresh the event viewer.
         /// </summary>
@@ -309,7 +304,6 @@ namespace WeatherAlert_DB
                 graphView_FilterComboBox.Items.Add(new GraphFilter((GraphFilter.FilterName.Severity)));
                 graphView_FilterComboBox.Items.Add(new GraphFilter((GraphFilter.FilterName.State)));
             }
-            
         }
     }
 }

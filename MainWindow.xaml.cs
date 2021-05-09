@@ -10,6 +10,12 @@ namespace WeatherAlert_DB
     /// </summary>
     public partial class MainWindow : Window
     {
+        /* --------------------------------------------------------------------------------------------
+         *  NOTICE: IF YOU ARE COPYING THIS REPO YOU MAY NEED TO BUILD SOLUTION BEFORE LAUNCHING DEBUG. 
+         *  IF YOU GET INTEROP.DLL ERROR FROM SQLITE DEPENDENCIES: PRESS Build> Build Solution.
+         * --------------------------------------------------------------------------------------------
+         */
+
         public DispatcherTimer RefreshUIDelayTimer;
         public MainWindow()
         {
@@ -24,7 +30,7 @@ namespace WeatherAlert_DB
 
             // Handle the Dispatcher Timer
             RefreshUIDelayTimer = new DispatcherTimer();
-            RefreshUIDelayTimer.Tick += RefreshUIDelayTimer_Tick;
+            RefreshUIDelayTimer.Tick += RefreshUIDelayTimer_FIRE;
             RefreshUIDelayTimer.Interval = new TimeSpan(0, 0, 0, 0, 450);
             RefreshUIDelayTimer.Start();
         }
@@ -64,8 +70,8 @@ namespace WeatherAlert_DB
             // Ensure the Checkbox's generated can also update the ListView
             foreach (CheckBox checkbox in EV_Keywords_ListBox.Items)
             {
-                checkbox.Checked += KeyWordCheckBox_Changed;
-                checkbox.Unchecked += KeyWordCheckBox_Changed;
+                checkbox.Checked += RefreshUIFor_RoutedEventArgs;
+                checkbox.Unchecked += RefreshUIFor_RoutedEventArgs;
             }
         }
         private void ShowUserFirstTimeHelpWindow()
@@ -95,34 +101,31 @@ namespace WeatherAlert_DB
         // -------------------------------------------
         // - Event Section                           -
         // -------------------------------------------
-
-        private void KeyWordCheckBox_Changed(object sender, RoutedEventArgs e)
+        private void RefreshUIFor_RoutedEventArgs(object sender, RoutedEventArgs e)
         {
             StartRefreshUIDelayTimer();
         }
-        private void EV_EventID_TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void RefreshUIFor_TextChangedEventArgs(object sender, TextChangedEventArgs e)
         {
             StartRefreshUIDelayTimer();
         }
-        private void EV_DateStart_DatePicker_CalendarClosed(object sender, RoutedEventArgs e)
+        private void RefreshUIFor_EventArgs(object sender, EventArgs e)
         {
             StartRefreshUIDelayTimer();
         }
-        private void EV_DateEnd_DatePicker_CalendarClosed(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            ShowUserFirstTimeHelpWindow();
+        }
+        private void GV_Filterby_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             StartRefreshUIDelayTimer();
         }
-        private void EV_EventType_ComboBox_DropDownClosed(object sender, EventArgs e)
+        private void RefreshUIDelayTimer_FIRE(object sender, EventArgs e)
         {
-            StartRefreshUIDelayTimer();
-        }
-        private void EV_State_ComboBox_DropDownClosed(object sender, EventArgs e)
-        {
-            StartRefreshUIDelayTimer();
-        }
-        private void EV_Severity_ComboBox_DropDownClosed(object sender, EventArgs e)
-        {
-            StartRefreshUIDelayTimer();
+            RefreshUIDelayTimer.Stop();
+            UpdateEventViewUI();
+            UpdateGraphViewUI();
         }
         private void EventView_ListView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -130,28 +133,6 @@ namespace WeatherAlert_DB
             ExpandedAlertViewer_Window expandedAlertViewer_Window = new ExpandedAlertViewer_Window((Alert)EventView_ListView.SelectedItem);
             expandedAlertViewer_Window.Owner = this;
             expandedAlertViewer_Window.Show();
-        }
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            ShowUserFirstTimeHelpWindow();
-        }
-        private void GV_PieChart_RadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            StartRefreshUIDelayTimer();
-        }
-        private void GV_BarGraph_RadioButton_Click(object sender, RoutedEventArgs e)
-        {
-            StartRefreshUIDelayTimer();
-        }
-        private void GV_Filterby_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            StartRefreshUIDelayTimer();
-        }
-        private void RefreshUIDelayTimer_Tick(object sender, EventArgs e)
-        {
-            RefreshUIDelayTimer.Stop();
-            UpdateEventViewUI();
-            UpdateGraphViewUI();
         }
     } 
 }

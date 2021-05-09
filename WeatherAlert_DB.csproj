@@ -135,6 +135,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AlertGenerator\AlertApiDataHandler.cs" />
+    <Compile Include="AlertGenerator\AlertBuilder.cs" />
+    <Compile Include="AlertGenerator\AlertDataParser.cs" />
+    <Compile Include="AlertGenerator\AlertDBInserter.cs" />
+    <Compile Include="AlertGenerator\AlertEnums.cs" />
     <Compile Include="Dialogs_and_Windows\ExpandedAlertViewer_Window.xaml.cs">
       <DependentUpon>ExpandedAlertViewer_Window.xaml</DependentUpon>
     </Compile>
@@ -172,7 +177,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Alert.cs" />
+    <Compile Include="AlertGenerator\Alert.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -37,17 +37,17 @@
                             <StackPanel Margin="1,1,1,1">
                                 <Label/>
                                 <Label Content="Event ID" HorizontalAlignment="Center" Margin="1,1,1,-10"/>
-                                <TextBox x:Name="EV_EventID_TextBox" Background="White" Margin="5,5,5,5" TextChanged="EV_EventID_TextBox_TextChanged"/>
+                                <TextBox x:Name="EV_EventID_TextBox" Background="White" Margin="5,5,5,5" TextChanged="RefreshUIFor_TextChangedEventArgs"/>
                                 <Label Content="Date Start" HorizontalAlignment="Center" Margin="1,1,1,-10"/>
-                                <DatePicker x:Name="EV_DateStart_DatePicker" Margin="5,5,5,5" CalendarClosed="EV_DateStart_DatePicker_CalendarClosed"/>
+                                <DatePicker x:Name="EV_DateStart_DatePicker" Margin="5,5,5,5" CalendarClosed="RefreshUIFor_RoutedEventArgs"/>
                                 <Label Content="Date End" HorizontalAlignment="Center" Margin="1,1,1,-10"/>
-                                <DatePicker x:Name="EV_DateEnd_DatePicker" Margin="5,5,5,5" CalendarClosed="EV_DateEnd_DatePicker_CalendarClosed"/>
+                                <DatePicker x:Name="EV_DateEnd_DatePicker" Margin="5,5,5,5" CalendarClosed="RefreshUIFor_RoutedEventArgs"/>
                                 <Label Content="Event Type" HorizontalAlignment="Center" Margin="1,1,1,-10"/>
-                                <ComboBox x:Name="EV_EventType_ComboBox" Margin="5,5,5,5" DropDownClosed="EV_EventType_ComboBox_DropDownClosed"/>
+                                <ComboBox x:Name="EV_EventType_ComboBox" Margin="5,5,5,5" DropDownClosed="RefreshUIFor_EventArgs"/>
                                 <Label Content="State" HorizontalAlignment="Center" Margin="1,1,1,-10"/>
-                                <ComboBox x:Name="EV_State_ComboBox" Margin="5,5,5,5" DropDownClosed="EV_State_ComboBox_DropDownClosed"/>
+                                <ComboBox x:Name="EV_State_ComboBox" Margin="5,5,5,5" DropDownClosed="RefreshUIFor_EventArgs"/>
                                 <Label Content="Severity" HorizontalAlignment="Center" Margin="1,1,1,-10"/>
-                                <ComboBox x:Name="EV_Severity_ComboBox" Margin="5,5,5,5" DropDownClosed="EV_Severity_ComboBox_DropDownClosed"/>
+                                <ComboBox x:Name="EV_Severity_ComboBox" Margin="5,5,5,5" DropDownClosed="RefreshUIFor_EventArgs"/>
                                 <Label Content="Keywords" HorizontalAlignment="Center" Margin="1,1,1,-10"/>
                                 <ListBox x:Name="EV_Keywords_ListBox" Margin="5,5,5,5" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
                             </StackPanel>
@@ -70,7 +70,7 @@
                                 <GridViewColumn Header="Area Description" Width=" 150" DisplayMemberBinding="{Binding AreaDescription}"/>
                             </GridView>
                         </ListView.View>
-                        <CheckBox Content="CheckBox" Height="100" Width="100" Checked="KeyWordCheckBox_Changed"/>
+                        <CheckBox Content="CheckBox" Height="100" Width="100" Checked="RefreshUIFor_RoutedEventArgs"/>
                     </ListView>
                 </DockPanel>
             </TabItem>
@@ -88,9 +88,9 @@
                             <ColumnDefinition Width="65"/>
                             <ColumnDefinition Width="170" MaxWidth="170"/>
                         </Grid.ColumnDefinitions>
-                        
-                        <RadioButton x:Name="GV_PieChart_RadioButton" Margin="2,6,0,0" Content="Pie Chart" Grid.Column="0" IsChecked="True" Click="GV_PieChart_RadioButton_Click"/>
-                        <RadioButton x:Name="GV_BarGraph_RadioButton" Margin="2,6,0,0" Content="Bar Graph" Grid.Column="1" Click="GV_BarGraph_RadioButton_Click"/>
+
+                        <RadioButton x:Name="GV_PieChart_RadioButton" Margin="2,6,0,0" Content="Pie Chart" Grid.Column="0" IsChecked="True" Click="RefreshUIFor_RoutedEventArgs"/>
+                        <RadioButton x:Name="GV_BarGraph_RadioButton" Margin="2,6,0,0" Content="Bar Graph" Grid.Column="1" Click="RefreshUIFor_RoutedEventArgs"/>
                         <Label Content="Filter By:" Grid.Column="2"></Label>
                         <ComboBox Name="GV_Filterby_ComboBox" Margin="2,2,2,2" Grid.Column="3" ItemsSource="{Binding Path=GraphFilter}"
                                   DisplayMemberPath="ComboBoxFilterName" SelectionChanged="GV_Filterby_ComboBox_SelectionChanged">

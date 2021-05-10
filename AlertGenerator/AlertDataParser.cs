@@ -13,10 +13,10 @@ namespace WeatherAlert_DB.AlertGenerator
         public AlertDataParser(string stringToParse, AlertProps _alertProp)
         {
             alertProp = _alertProp;
-            ParseAvailableData(stringToParse);
+            ParseData(stringToParse);
         }
 
-        public void ParseAvailableData(string stringToParse)
+        private void ParseData(string stringToParse)
         {
             switch (alertProp)
             {

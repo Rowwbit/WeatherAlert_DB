@@ -19,7 +19,7 @@ namespace WeatherAlert_DB.AlertGenerator
         // Returns a bool if property matches the line.
         private bool IsPropOnThisLine(AlertProps availAlertProp, string stringToSearch)
         {
-            if (stringToSearch.StartsWith(AlertEnums.ConvertEnumToSearchableString(availAlertProp)))
+            if (stringToSearch.StartsWith(AlertEnums.ConvertEnumToSearchableString(availAlertProp)) && stringToSearch != null)
             {
                 return true;
             }
@@ -28,13 +28,13 @@ namespace WeatherAlert_DB.AlertGenerator
         // Returns a string based on whether a property exists or not.
         private string GetValueToAdd(AlertProps availAlertProp, string stringToAdd)
         {
-            if (IsPropOnThisLine(availAlertProp, stringToAdd))
+            if (IsPropOnThisLine(availAlertProp, stringToAdd) && stringToAdd != null)
             {
                 return stringToAdd;
             }
             else
             {
-                return "NOT SPECIFIED";
+                return null;
             }
         }
 
@@ -45,8 +45,14 @@ namespace WeatherAlert_DB.AlertGenerator
             // Loop through available props that is searched for.
             foreach (int propNum in Enum.GetValues(typeof(AlertProps)))
             {
-                tmpPropsArr[propNum] = GetValueToAdd((AlertProps)propNum, alertApiDataList[propNum]);
+                // Check to make sure loop doesn't go OOB.
+                if (!(propNum > alertApiDataList.Count - 1))
+                {
+                    tmpPropsArr[propNum] = GetValueToAdd((AlertProps)propNum, alertApiDataList[propNum]);
+                }
+
             }
+            ReplaceArrNullEntries(tmpPropsArr);
             return tmpPropsArr;
         }
         private int CountFoundDataInArray(string[] propArr)
@@ -56,7 +62,7 @@ namespace WeatherAlert_DB.AlertGenerator
             int numOfFoundData = 0;
             foreach (var line in propArr)
             {
-                if (line != "NOT SPECIFIED")
+                if (line != "NOT SPECIFIED" && line != null)
                 {
                     numOfFoundData++;
                 }
@@ -71,6 +77,17 @@ namespace WeatherAlert_DB.AlertGenerator
                 string[] tmparry = BuildArrayProps();
                 alertApiDataList.RemoveRange(0, CountFoundDataInArray(tmparry));
                 PropDataSets.Add(tmparry);
+            }
+        }
+        private void ReplaceArrNullEntries(string[] propArr)
+        {
+            // Ensure any null values are replaced
+            for (int i = 0; i < propArr.Length; i++)
+            {
+                if (string.IsNullOrEmpty(propArr[i]))
+                {
+                    propArr[i] = "NOT SPECIFIED";
+                }
             }
         }
         /// <summary>

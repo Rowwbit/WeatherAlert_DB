@@ -28,9 +28,8 @@ namespace WeatherAlert_DB.AlertGenerator
                 foreach (var entry in alerts)
                 {
                     SQLite_Data_Access.InsertIn_DB(entry);
-                    LogHandler.AddLogEntry(entry.Id);
                 }
-                LogHandler.WriteLogFile("Records Synced");
+                LogHandler.WriteLogFile("Records Synced.");
             }
             catch (Exception e)
             {

@@ -94,6 +94,9 @@ namespace WeatherAlert_DB
         }
         private static void UpdateUIEventType(ListView listView, ComboBox eventTypeComboBox)
         {
+            // Clears the combobox before refresh
+            eventTypeComboBox.Items.Clear();
+
             // Grab the objects from the current ListView and populate the Event Type combobox.
             foreach (var item in listView.Items)
             {
@@ -137,6 +140,9 @@ namespace WeatherAlert_DB
         }
         private static void UpdateUISeverity(ListView listView, ComboBox eventTypeComboBox)
         {
+            // Clears the combobox before refresh
+            eventTypeComboBox.Items.Clear();
+
             // Grab the objects from the current ListView and populate the Severity Type combobox.
             foreach (var item in listView.Items)
             {

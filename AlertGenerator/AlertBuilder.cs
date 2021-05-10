@@ -9,7 +9,7 @@ namespace WeatherAlert_DB.AlertGenerator
     public class AlertBuilder
     {
         // Retrieve datasets to start building alerts
-        static List<string[]> dataSets = new AlertApiDataHandler().GetAllPropDataSetArrays();
+        List<string[]> dataSets = new AlertApiDataHandler().GetAllPropDataSetArrays();
         AlertDBInserter AlertDBInserter = new AlertDBInserter();
 
         public AlertBuilder()
@@ -24,11 +24,7 @@ namespace WeatherAlert_DB.AlertGenerator
         {
             foreach (var dataSet in dataSets)
             {
-                var myvar = GenerateListPerAlert(dataSet);
-
-                Alert alert = CreateNewAlert(myvar);
-
-                AlertDBInserter.AddAlertEntry(alert);
+                AlertDBInserter.AddAlertEntry(CreateNewAlert(GenerateListPerAlert(dataSet)));
             }
             
             // Finalize the Entries and send to DB.

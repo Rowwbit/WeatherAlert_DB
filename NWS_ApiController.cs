@@ -9,7 +9,7 @@ namespace WeatherAlert_DB
     /// <summary>
     /// Used to contact the NWS API.
     /// </summary>
-    class NWS_ApiController
+    static class NWS_ApiController
     {
         private static HttpClient client = new HttpClient();
         /// <summary>

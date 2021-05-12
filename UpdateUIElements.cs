@@ -1,4 +1,6 @@
 ﻿using ScottPlot;
+using SharedResourceLib;
+using SharedResourceLib.DirAndIOSystems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +8,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Threading;
+using SharedResourceLib.API_Systems;
 
 namespace WeatherAlert_DB
 {
-
+    
     /// <summary>
     /// This class updates the MainWindow with information from the DB.
     /// </summary>
@@ -160,7 +163,7 @@ namespace WeatherAlert_DB
             ComboBox severityComboBox, ListBox keywordsListBox)
         {
             // Make a new list with all the current objects in the DB to reference.
-            List<Alert> AlertList = SQLite_Data_Access.SelectAll_DB();
+            List<Alert> AlertList = SQLite_Data_Access.SelectAll_DB(ConnStringManager.GetMainDBConnectionString());
 
             // Make a reversed StateDictionary to compare the values to the keys
             Dictionary<String, String> ReversedStateDictionary = new Dictionary<string, string>();
@@ -218,7 +221,7 @@ namespace WeatherAlert_DB
             }
 
             // Handle the first StatusBar Item
-            int NumberOfAllRecords = SQLite_Data_Access.SelectAll_DB().Count;
+            int NumberOfAllRecords = SQLite_Data_Access.SelectAll_DB(ConnStringManager.GetMainDBConnectionString()).Count;
             int NumberOfShownRecords = listView.Items.Count;
             ControlsInStatusBar[0].Content = $"Records Shown: {NumberOfShownRecords}/{NumberOfAllRecords}";
 
@@ -239,42 +242,17 @@ namespace WeatherAlert_DB
         }
         private static void DispatcherTimer_Tick(object sender, EventArgs e, StatusBarItem statusBarItem)
         {
-            UpdateStatusBarSyncTimer(statusBarItem);
+            UpdateStatusBarSyncTime(statusBarItem);
             ApiLoopHandler.ApiTimeSpan = ApiLoopHandler.ApiTimeSpan.Subtract(new TimeSpan(0, 0, 1));
             System.Windows.Input.CommandManager.InvalidateRequerySuggested();
         }
-        private static void UpdateStatusBarSyncTimer(StatusBarItem statusBarItem)
+        private static void UpdateStatusBarSyncTime(StatusBarItem statusBarItem)
         {
-            // Check if the user is using the DummyDB before displaying StatusBar Sync info to user
-            if (!SQLite_Data_Access.IsUsingDummyDB)
-            {
-                // Checks the ApiTimeSpan status and updates the Statusbar item with info on the Sync Status
-                // The timespan gets set to -1 if the DB is syncing
-                if (ApiLoopHandler.ApiTimeSpan.TotalMilliseconds < 0)
-                {
-                    statusBarItem.Content = "Sync Status: Syncing";
-                }
-                else
-                {
-                    statusBarItem.Content = FormatSyncStatus();
-                }
-            }
-            else
-            {
-                statusBarItem.Content = "Sync Status: Disabled";
-            }
+            statusBarItem.Content = FormatSyncStatus();
         }
         private static string FormatSyncStatus()
         {
-            // Returns the minutes left unless the minutes are under 1. Then it returns seconds instead.
-            if (ApiLoopHandler.ApiTimeSpan.TotalMinutes < 1)
-            {
-                return $"Sync Status: {ApiLoopHandler.ApiTimeSpan.Seconds}s";
-            }
-            else
-            {
-                return $"Sync Status: {ApiLoopHandler.ApiTimeSpan.Minutes}m";
-            }
+            return $"Last sync: {Dir_and_File_Handler.GetLastDBWriteTime()}";
         }
 
         // -------------------------------------------
@@ -305,10 +283,10 @@ namespace WeatherAlert_DB
             // Add GraphFilter objects to the ComboBox
             if (graphView_FilterComboBox.Items.Count == 0)
             {
-                graphView_FilterComboBox.Items.Add(new GraphFilter((GraphFilter.FilterName.DescriptionKeywords)));
-                graphView_FilterComboBox.Items.Add(new GraphFilter((GraphFilter.FilterName.EventType)));
-                graphView_FilterComboBox.Items.Add(new GraphFilter((GraphFilter.FilterName.Severity)));
-                graphView_FilterComboBox.Items.Add(new GraphFilter((GraphFilter.FilterName.State)));
+                graphView_FilterComboBox.Items.Add(new GraphFilter(GraphFilter.FilterName.DescriptionKeywords));
+                graphView_FilterComboBox.Items.Add(new GraphFilter(GraphFilter.FilterName.EventType));
+                graphView_FilterComboBox.Items.Add(new GraphFilter(GraphFilter.FilterName.Severity));
+                graphView_FilterComboBox.Items.Add(new GraphFilter(GraphFilter.FilterName.State));
             }
         }
     }

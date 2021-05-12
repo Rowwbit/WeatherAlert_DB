@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.30709.132
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherAlert_DB", "WeatherAlert_DB.csproj", "{67F57CEE-F4D6-4216-BBDE-35FAB91CF5F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherAlert Sync DB", "..\WeatherAlert Sync DB\WeatherAlert Sync DB.csproj", "{1CB66FB3-B997-40BA-A71B-B0F08DF24A9E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherAlert SyncService", "..\WeatherAlert Sync DB\WeatherAlert SyncService.csproj", "{1CB66FB3-B997-40BA-A71B-B0F08DF24A9E}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "WA_Sync_Service_Installer", "..\WA_Sync_Service_Installer\WA_Sync_Service_Installer.vdproj", "{F5420636-920D-4DA9-952A-F9D93C8AE237}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedResourceLib", "..\SharedResourceLib\SharedResourceLib.csproj", "{7ACA3CED-3B9E-46E7-A873-F2F3FD2B150D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{1CB66FB3-B997-40BA-A71B-B0F08DF24A9E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F5420636-920D-4DA9-952A-F9D93C8AE237}.Debug|Any CPU.ActiveCfg = Debug
 		{F5420636-920D-4DA9-952A-F9D93C8AE237}.Release|Any CPU.ActiveCfg = Release
+		{7ACA3CED-3B9E-46E7-A873-F2F3FD2B150D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ACA3CED-3B9E-46E7-A873-F2F3FD2B150D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ACA3CED-3B9E-46E7-A873-F2F3FD2B150D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ACA3CED-3B9E-46E7-A873-F2F3FD2B150D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

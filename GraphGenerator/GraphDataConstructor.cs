@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharedResourceLib.DirAndIOSystems;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,9 +21,9 @@ namespace WeatherAlert_DB
         public void RequestAndGenerateData()
         {
             // Request DB records
-            var Alerts = SQLite_Data_Access.SelectAll_DB();
+            var Alerts = SQLite_Data_Access.SelectAll_DB(ConnStringManager.GetMainDBConnectionString());
 
-            // Aggregate the data values from the Expression and save them into the TupleList
+            // Aggregate the data values from the expression and save them into the TupleList
             foreach (var item in Alerts.GroupBy(graphFilter.filterName.ToString()).Select(z => new { Key = z.Key, Count = z.Count() }))
             {
                 TupleList.Add(new Tuple<string, int>(item.Key.ToString(), item.Count));

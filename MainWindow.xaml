@@ -109,7 +109,7 @@
             </StatusBarItem>
 
             <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock Text="Sync Status: " FontSize="14"/>
+                <TextBlock Text="Last sync:" FontSize="14"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>

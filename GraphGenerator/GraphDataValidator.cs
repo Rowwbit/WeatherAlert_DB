@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharedResourceLib;
+using System;
 using System.Collections.Generic;
 
 namespace WeatherAlert_DB

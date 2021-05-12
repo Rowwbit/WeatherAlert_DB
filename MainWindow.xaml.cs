@@ -2,6 +2,7 @@
 using System;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using SharedResourceLib;
 
 namespace WeatherAlert_DB
 {
@@ -20,6 +21,7 @@ namespace WeatherAlert_DB
         public MainWindow()
         {
             InitializeComponent();
+            SharedResourceLib.DirAndIOSystems.Dir_and_File_Handler.GenerateAllFilesAndFolders();
             InitializeWindowLogic();
         }
         private void InitializeWindowLogic()
@@ -55,7 +57,7 @@ namespace WeatherAlert_DB
             UpdateUIElements.PopulateAllEventViewControls(
                 EventView_ListView, EV_EventID_TextBox, EV_DateStart_DatePicker,
                 EV_DateEnd_DatePicker, EV_EventType_ComboBox, EV_State_ComboBox,
-                 EV_Severity_ComboBox,EV_Keywords_ListBox, Bottom_StatusBar);
+                EV_Severity_ComboBox,EV_Keywords_ListBox, Bottom_StatusBar);
         }
         /// <summary>
         /// Refresh and Display control data to the user for the entire GraphView section.

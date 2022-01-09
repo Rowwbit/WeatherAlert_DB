@@ -123,7 +123,7 @@ namespace WeatherAlert_DB
         public static List<string> ReturnApiCall()
         {
             // Setup the API request and return the filtered output as a string list for later use.
-            string Request = "https://api.weather.gov/alerts/active?status=actual&message_type=alert&certainty=observed";
+            string Request = "https://api.weather.gov/alerts/active?status=actual&message_type=alert&certainty=Observed";
             string[] Keywords = { "@id\":", "sent\":", "event\":", "senderName\":", "severity\":", "NWSheadline\":", "areaDesc\":", "description\":" };
             return ParseReaderStringForKeywords(Keywords,RequestNWSApi(Request));
         }

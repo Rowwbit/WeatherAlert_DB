@@ -57,7 +57,7 @@ namespace WeatherAlert_DB
         private static bool SyncingInfoToDB()
         {
             // Call log to write to later.
-            LogHandler AlertLog = new LogHandler("Successfully synced records.\nDuplicates skipped:");
+            LogHandler AlertLog = new LogHandler("Successfully synced records.");
 
             // Declare bool to check if the data is still being entered or it is done
             bool IsSyncing = true;
@@ -145,10 +145,9 @@ namespace WeatherAlert_DB
                         ValuesForObjectInstantiation[8], Alert.CleanDescriptiveKeywords(ValuesForObjectInstantiation[9]),
                         ValuesForObjectInstantiation[10]);
 
-                    // Construct the objects and for each skipped object out it to log
-                    if (!SQLite_Data_Access.InsertIn_DB(alert))
+                    // Construct the objects, count created ones and output it to log
+                    if (SQLite_Data_Access.InsertIn_DB(alert))
                     {
-                        AlertLog.LogMessage += $" {ValuesForObjectInstantiation[0]},";
                         AlertLog.NumOfObjects++;
                     }
 
@@ -172,10 +171,9 @@ namespace WeatherAlert_DB
                         ValuesForObjectInstantiation[8], Alert.CleanDescriptiveKeywords(ValuesForObjectInstantiation[9]),
                         ValuesForObjectInstantiation[10]);
 
-                    // Construct the objects and for each skipped object out it to log
-                    if (!SQLite_Data_Access.InsertIn_DB(alert))
+                    // Construct the objects, count created ones and output it to log
+                    if (SQLite_Data_Access.InsertIn_DB(alert))
                     {
-                        AlertLog.LogMessage += $" {ValuesForObjectInstantiation[0]},";
                         AlertLog.NumOfObjects++;
                     }
 
@@ -184,7 +182,7 @@ namespace WeatherAlert_DB
                 }
             }
             // Output AlertLog
-            AlertLog.LogMessage += "\nTotal Skipped Alerts: " + AlertLog.NumOfObjects;
+            AlertLog.LogMessage += "\nTotal added alerts: " + AlertLog.NumOfObjects;
             AlertLog.WriteLogFile();
 
             // return the bool value

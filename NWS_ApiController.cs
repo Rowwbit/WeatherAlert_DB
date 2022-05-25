@@ -28,30 +28,15 @@ namespace WeatherAlert_DB
                 var content = rdr.ReadToEnd();
                 return content;
             }
-            catch (HttpRequestException e)
+            catch (Exception e)
             {
-                // Catch the exception and generate a Log entry with the exception 
-                MessageBox.Show("NWS Services currently unavailable." +
-                                 "\nException has been logged." +
-                                 "\nPlease try again later.");
 
                 // Log info
-                var Log = new LogHandler("ERROR: NWS Services could not be requested.", e);
+                var Log = new LogHandler("ERROR: NWS Services could not be requested.", e );
                 Log.WriteLogFile();
                 return "";
             }
-            catch (AggregateException e)
-            {
-                // Catch the exception and generate a Log entry with the exception 
-                MessageBox.Show("NWS Services currently unavailable." +
-                                 "\nException has been logged." +
-                                 "\nPlease try again later.");
-
-                // Log info
-                var Log = new LogHandler("ERROR: NWS Services could not be requested.", e);
-                Log.WriteLogFile();
-                return "";
-            }
+         
         }
         private static List<string> ParseReaderStringForKeywords(string[] keywordsToSearchFor, string readerTxt)
         {
